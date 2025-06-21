@@ -1,41 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long
-#define endl '\n'
-#define MOD 1000000007
-#define BOOST ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0); 
-#pragma GCC optimize("Ofast")
+#define BOOST ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-
-int main(){
+int main() {
     BOOST;
-    fstream cin("DT.INP", ios::in);
-    fstream cout("DT.OUT", ios::out);
-    int t, n, m = 0; cin >> t >> n;
-    int deg_in[n + 1] = {0}, 
-        deg_out[n + 1] = {0},
-        matrix[n + 1][101] = {0};
-    for (int i = 1; i <= n; ++i){
-        int k; cin >> k;
-        while (k--)
-        {
-            int x; cin >> x;
-            ++deg_out[i];
-            ++deg_in[x];
-            ++m;
-            matrix[i][m] = 1;
-            matrix[x][m] = -1;
+    ifstream fin("DT.INP");
+    ofstream fout("DT.OUT");
+    int t, n;
+    fin >> t >> n;
+    vector<int> deg_in(n + 1, 0), deg_out(n + 1, 0);
+    vector<pair<int, int>> edges; // lưu các cạnh theo thứ tự từ điển
+
+    // Đọc danh sách kề và lưu cạnh
+    for (int i = 1; i <= n; ++i) {
+        int k; fin >> k;
+        for (int j = 0; j < k; ++j) {
+            int x; fin >> x;
+            deg_out[i]++;
+            deg_in[x]++;
+            edges.push_back({i, x});
         }
     }
-    if(t == 1) {
-        for (int i = 1; i <= n; ++i) cout << deg_in[i] << " " << deg_out[i] << endl;
+    int m = edges.size();
+
+    if (t == 1) {
+        for (int i = 1; i <= n; ++i)
+            fout << deg_in[i] << " " << deg_out[i] << "\n";
     } else {
-        cout << n << " " << m << endl;
-        for (int i = 1; i <= n; ++i){
-            for (int j = 1; j <= m; ++j) cout << matrix[i][j] << " ";
-            cout << endl;
+        fout << n << " " << m << "\n";
+        // Tạo ma trận liên thuộc
+        vector<vector<int>> matrix(n + 1, vector<int>(m + 1, 0));
+        for (int j = 0; j < m; ++j) {
+            int u = edges[j].first;
+            int v = edges[j].second;
+            matrix[u][j + 1] = 1;
+            matrix[v][j + 1] = -1;
+        }
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j)
+                fout << matrix[i][j] << " ";
+            fout << "\n";
         }
     }
-    
-    
 }

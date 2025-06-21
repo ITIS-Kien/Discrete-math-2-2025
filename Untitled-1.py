@@ -1,0 +1,5 @@
+n, k = map(int, input().split())
+n = pow(n, k, 10**9)
+s = str(n)
+if n != 0 : print(s[-6:])
+else : print("000000")
